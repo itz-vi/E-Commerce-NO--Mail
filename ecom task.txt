@@ -1,0 +1,4 @@
+1.   register  / login ✅
+2.   create product  ✅
+3.   add to cart   ✅
+4.   product buy  ✅

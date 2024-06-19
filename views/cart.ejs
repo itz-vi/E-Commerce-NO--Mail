@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<style>
+  body {
+    background: linear-gradient(23deg, #00fbff, #8c00ff95, #0108947a);
+    height: 100vh
+  }
+
+  .navbar {
+    background-color: #1a278f;
+    margin-bottom: 22px;
+    color: aliceblue;
+  }
+
+  .navbar a {
+    color: aliceblue !important;
+  }
+
+  thead {
+    background-color: rgb(10, 103, 190);
+    color: aliceblue;
+  }
+
+  .img {
+    border: 2px solid rgb(141, 202, 255);
+    border-radius: 5px;
+  }
+
+  table {
+    background-color: #fff;
+  }
+
+  .amt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 26px;
+  }
+
+  tbody td {
+    font-size: 20px;
+  }
+
+  .total {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    gap: 33px;
+  }
+
+  .purchase-btn {
+    padding: 7px 20px;
+    margin: 8px 33px;
+    font-size: 18px;
+    border: none;
+    background-color: #402aff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  .purchase-btn:focus {
+    border: none;
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .modal {
+    background: #0b0731b9;
+    z-index: 2;
+  }
+
+  /* Close button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .dusramodal {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 500px;
+  }
+
+  .atm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-weight: 600;
+    font-size: 18px;
+  }
+
+  .btn-ok {
+    padding: 7px 20px;
+    margin: 8px 33px;
+    font-size: 18px;
+    border: none;
+    background-color: #402aff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+</style>
+
+<body>
+  <nav class="navbar fixed top-0 left-0 px-5 py-3 flex justify-between">
+    <h3 class="text-2xl">Scatch</h3>
+    <div>
+      <a href="/shop">
+        <h3 class="text-xl px-5 mr-12">Shop</h3>
+      </a>
+    </div>
+  </nav>
+
+  <div class="container mt-16">
+    <h2 class="mb-4">Shopping Cart</h2>
+
+    <% if (cart.length === 0) { %>
+    <p>Your cart is empty.</p>
+    <% } else { %>
+    <table class="table table-bordered">
+      <thead class="thead">
+        <tr>
+          <th scope="col">Image</th>
+          <th scope="col">Product Name</th>
+          <th scope="col">Price</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Total Amount</th>
+          <th scope="col">Remove</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% cart.forEach(product => { %>
+        <tr>
+          <td><img src="/uploads/<%= product.image %>" alt="<%= product.name %>" class="img" style="width: 60px;"></td>
+          <td><%= product.name %></td>
+          <td>₹ <%= product.price %></td>
+          <td>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity('<%= product.id %>', -1)">-</button>
+              </div>
+              <input type="text" class="form-control" value="<%= product.quantity %>" readonly>
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity('<%= product.id %>', 1)">+</button>
+              </div>
+            </div>
+          </td>
+          <td>₹ <%= product.price * product.quantity %></td>
+          <td>
+            <form action="/cart/remove" method="POST" onsubmit="return confirm('Are you sure you want to remove this product?');">
+              <input type="hidden" name="productId" value="<%= product.id %>">
+              <button type="submit" class="btn btn-danger">&times;</button>
+            </form>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+    <div class="total">
+      <div></div> <!-- This empty div is for alignment purposes -->
+      <div class="amt">Total Amount: ₹ <%= totalCost %></div>
+      <button class="purchase-btn" onclick="showModal()">Purchase Now</button>
+    </div>
+    <% } %>
+  </div>
+
+  <!-- Modal -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="hideModal()">&times;</span>
+      <h2>Order Summary</h2>
+      <!-- Add your order summary here -->
+      <div class="amt">Total Amount: ₹ <%= totalCost %></div>
+      <button class="purchase-btn" id="placeOrderBtn">Place Order</button>
+      <button class="purchase-btn" onclick="hideModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Order Confirmation Modal -->
+  <div id="orderConfirmationModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content dusramodal">
+      <span class="close" onclick="hideConfirmationModal()">&times;</span>
+      <h2>Order Confirmation</h2>
+      <div class="order-details atm mt-3">
+        <em id="confirmationMessage">Your order has been placed successfully!</em>
+        <p>Your order ID is: <span id="confirmationOrderId"></span></p>
+        <p>Your order will be delivered within 3-5 working days.</p>
+        <p>
+          You can pay ₹ <span id="confirmationTotalCost"><%= totalCost %></span>
+          by card or any online transaction method after the products have been delivered to you.
+        </p>
+      </div>
+      <button onclick="hideConfirmationModal(); showThankYouModal();" class="btn-ok">Okay</button>
+    </div>
+  </div>
+
+  <!-- Thank You Modal -->
+  <div id="thankYouModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content dusramodal">
+      <!-- <span class="close" onclick="hideThankYouModal()">&times;</span> -->
+      <h2>Thank You!</h2>
+      <p>Your order has been successfully placed.</p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('placeOrderBtn').addEventListener('click', function() {
+      placeOrder();
+    });
+
+    function updateQuantity(productId, change) {
+      fetch('/cart/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          productId,
+          change
+        })
+      }).then(response => {
+        if (response.ok) {
+          location.reload(); // Reload the page only after the quantity is updated successfully
+        }
+      }).catch(error => {
+        console.error('Error updating quantity:', error);
+      });
+    }
+
+    function showModal() {
+      document.getElementById("myModal").style.display = "block";
+    }
+
+    function hideModal() {
+      document.getElementById("myModal").style.display = "none";
+    }
+
+    function showConfirmationModal() {
+      document.getElementById("orderConfirmationModal").style.display = "block";
+    }
+
+    function hideConfirmationModal() {
+      document.getElementById("orderConfirmationModal").style.display = "none";
+    }
+
+    function showThankYouModal() {
+      document.getElementById("thankYouModal").style.display = "block";
+      // Automatically hide the Thank You modal after 3 seconds
+      setTimeout(hideThankYouModal, 3000);
+    }
+
+    function hideThankYouModal() {
+      document.getElementById("thankYouModal").style.display = "none";
+    }
+
+    function placeOrder() {
+      const orderId = generateOrderId(); // You can generate a unique order ID on the server-side
+      const totalCost = "<%= totalCost %>"; // Use the server-side calculated total cost
+
+      // Update modal content with order details
+      document.getElementById('confirmationOrderId').innerText = orderId;
+      document.getElementById('confirmationTotalCost').innerText = totalCost;
+
+      // Hide the "Order Summary" modal
+      hideModal();
+
+      // Show the confirmation modal
+      showConfirmationModal();
+    }
+
+    function generateOrderId() {
+      return Math.floor(Math.random() * 1000000) + 1;
+    }
+  </script>
+
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

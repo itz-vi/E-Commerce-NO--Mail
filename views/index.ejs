@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playwrite+AU+QLD:wght@100..400&family=Playwrite+FR+Trad:wght@100..400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-image: linear-gradient(to top, #48c6ef 0%, #6f86d6 100%);
+    }
+
+    .scatch {
+      color: #111827;
+      font-weight: 700;
+      font-family: "Playwrite AU QLD", cursive;
+      font-optical-sizing: auto;
+      font-weight: 400
+    }
+
+    nav {
+      background-image: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+    }
+
+    nav h3 {
+      color: #0b2f7a;
+    }
+
+    .bt {
+      color: #041e57;
+    }
+
+    .box1 {
+      height: 600px;
+      width: 500px;
+      background-image: linear-gradient(-225deg, #5D9FFF 0%, #B8DCFF 48%, #6BBBFF 100%);
+
+
+    }
+
+    .box2 {
+      height: 500px;
+      width: 400px;
+      background-image: linear-gradient(-225deg, #5D9FFF 0%, #B8DCFF 48%, #6BBBFF 100%);
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="w-full fixed top-0 left-0 px-5 py-3">
+    <a href="/shop">
+      <h3 class="text-3xl ml-4 sm:ml-16 scatch">Scatch</h3>
+    </a>
+  </nav>
+
+  <div class="w-full h-screen flex flex-col sm:flex-row p-8  items-center justify-center gap-8 sm:gap-20 pt-20 mt-10">
+    <div class="flex items-center justify-center box1 w-full sm:w-auto">
+      <div class="w-full max-w-md px-6 sm:px-16 py-10">
+        <h3 class="text-4xl">Welcome to <span class="bt font-semibold">Scatch</span></h3>
+        <h4 class="text-2xl mb-5">Create your account</h4>
+        <form autocomplete="off" action="/register" method="post">
+          <input class="bg-zinc-100 block w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="text" placeholder="Full Name" name="fullname" aria-label="Full Name">
+          <input class="bg-zinc-100 block w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="email" placeholder="Email" name="email" aria-label="Email">
+          <input class="bg-zinc-100 block w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="password" placeholder="Password" name="password" aria-label="Password">
+          <input class="px-5 rounded-full py-3 mt-2 bg-blue-500 text-white cursor-pointer" type="submit" value="Create My Account">
+        </form>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-center mb-8 sm:mb-0 mt-12 sm:mt-0 box2 w-full sm:w-auto">
+      <div class="w-full max-w-md px-6 sm:px-16 py-10">
+        <h4 class="text-2xl capitalize mb-5">Login to your account</h4>
+        <form autocomplete="off" action="/login" method="post">
+          <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="email" placeholder="Email" name="email" aria-label="Email">
+          <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="password" placeholder="Password" name="password" aria-label="Password">
+          <input class="px-5 block rounded-full py-3 mt-2 bg-blue-500 text-white cursor-pointer" type="submit" value="Login">
+        </form>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
